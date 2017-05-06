@@ -22,7 +22,7 @@ vector<int> getPartialMatch(string& N){
   return pi;
 }
 
-//H의 부분문자열로 N이 출현하는 시작 위치들을 모두 반환
+//M의 부분문자열로 N이 출현하는 시작 위치들을 모두 반환
 vector<int> kmpSearch(string& M, string& N){
   int m = M.size(), n = N.size();
   vector<int> ret;

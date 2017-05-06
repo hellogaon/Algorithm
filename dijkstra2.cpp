@@ -5,7 +5,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
-#define MAX_VALUE 100000000
+#define MAX_VALUE 2100000000
 
 using namespace std;
 
@@ -16,21 +16,11 @@ public:
   }
 };
 
-int main(){
-  int V,E,K; //노드수 간선수 시작노드
-  scanf("%d %d %d",&V,&E,&K);
-  vector<int> dist(V+1,MAX_VALUE); //최단경로
-  vector<int> path(V+1,-1); //경로추적
-  vector<vector<pair<int,int> > > adj(V+1);
-  priority_queue<pair<int,int>,vector<pair<int,int> >,my_greater> pq;
+vector<vector<pair<int,int> > > adj;
 
-  for(int i=0;i<E;i++){
-    int u,v,w; //시작노드 끝노드 간선의크기
-    scanf("%d %d %d",&u,&v,&w);
-    adj[u].push_back(make_pair(v,w));
-  }
-
+void dijkstra(int K, vector<int> &dist, vector<int> &path){
   dist[K]=0; path[K]=0;
+  priority_queue<pair<int,int>,vector<pair<int,int> >,my_greater> pq;
   pq.push(make_pair(K,0));
 
   while(!pq.empty()){
@@ -46,6 +36,23 @@ int main(){
       }
     }
   }
+}
+
+int main(){
+  int V,E,K; //노드수 간선수 시작노드
+  scanf("%d %d %d",&V,&E,&K);
+  adj.resize(V+1);
+  vector<int> dist(V+1,MAX_VALUE); //최단경로
+  vector<int> path(V+1,-1); //경로추적
+
+  for(int i=0;i<E;i++){
+    int u,v,w; //시작노드 끝노드 간선의크기
+    scanf("%d %d %d",&u,&v,&w);
+    adj[u].push_back(make_pair(v,w));
+  }
+
+  dijkstra(K,dist,path);
+
   //경로추적
   for(int i=1;i<=V;i++){
     printf("%d -> %d 경로 : ",K,i);
