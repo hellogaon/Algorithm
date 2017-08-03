@@ -6,6 +6,7 @@ using namespace std;
 struct Fenwicktree {
   vector<int> tree;
   Fenwicktree(int n) : tree(n+1) {}
+  //맨 오른쪽에 있는 1인 비트를 지우는 연산
   int sum(int pos){
     ++pos;
     int ret = 0;
@@ -15,6 +16,7 @@ struct Fenwicktree {
     }
     return ret;
   }
+  //맨 오른쪽애 있는 1인 비트를 스스로에게 더해 주는 연산
   void add(int pos, int val){
     ++pos;
     while(pos < tree.size()){

@@ -42,8 +42,8 @@ struct RMQ{
     if(nodeLeft == nodeRight) return rangeMin[node] = newValue;
     int mid = (nodeLeft + nodeRight) / 2;
     return rangeMin[node] = min(
-      query(index, newValue, node*2, nodeLeft, mid),
-      query(index, newValue,node*2+1, mid+1, nodeRight));
+      update(index, newValue, node*2, nodeLeft, mid),
+      update(index, newValue, node*2+1, mid+1, nodeRight));
   }
   int update(int index, int newValue){
     return update(index, newValue, 1, 0, n-1);
