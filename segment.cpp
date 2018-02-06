@@ -18,14 +18,14 @@ void update(vector<long long> &tree, int node, int start, int end, int index, lo
   tree[node] = tree[node]+diff;
   if (start != end){
     update(tree,node*2,start,(start+end)/2,index,diff);
-    update(tree,node*2+1, (start+end)/2+1, end, index, diff);
+    update(tree,node*2+1,(start+end)/2+1,end,index,diff);
   }
 }
 // node가 담당하는 구간이 start~end이고, 구해야하는 합의 범위는 left~right  
 long long sum(vector<long long> &tree, int node, int start, int end, int left, int right){
   if (left>end || right<start) return 0;
   if (left<=start && end<=right) return tree[node];
-  return sum(tree,node*2,start,(start+end)/2,left,right) + sum(tree,node*2+1,(start+end)/2+1,end,left,right);
+  return sum(tree,node*2,start,(start+end)/2,left,right)+sum(tree,node*2+1,(start+end)/2+1,end,left,right);
 }
 
 int main(){
