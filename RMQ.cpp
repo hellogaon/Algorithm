@@ -49,3 +49,24 @@ struct RMQ{
     return update(index, newValue, 1, 0, n-1);
   }
 };
+
+
+int main(){
+  int N,M,K;
+  scanf("%d %d %d",&N,&M,&K);
+  vector<int> arr;
+  for(int i=0;i<N;i++){
+    int X; scanf("%d",&X);
+    arr.push_back(X);
+  }
+  RMQ* rmq = new RMQ(arr);
+  for(int i=0;i<M+K;i++){
+    int a,b,c;
+    scanf("%d %d %d",&a,&b,&c);
+    if(a==1)
+      rmq->update(b-1,c);
+    if(a==2){
+      printf("%d\n",rmq->query(b-1,c-1));
+    }
+  }
+}
