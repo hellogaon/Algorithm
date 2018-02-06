@@ -10,10 +10,12 @@ using namespace std;
 
 int V,E,S;
 vector<pair<int,int> > adj[MAX_V];
+vector<int> parent(MAX_V+1,-1);
 
 vector<int> dijkstra(int src){
   vector<int> dist(V+1,INF);
   dist[src]=0;
+  parent[src]=src;
   priority_queue<pair<int,int> > pq;
   pq.push(make_pair(0,src));
   while(!pq.empty()){
@@ -25,11 +27,22 @@ vector<int> dijkstra(int src){
       int nextDist = cost + adj[here][i].second;
       if(dist[there] > nextDist){
         dist[there] = nextDist;
+        parent[there] = here;
         pq.push(make_pair(-nextDist, there));
       }
     }
   }
   return dist;
+}
+
+vector<int> shortestPath(int v){
+  vector<int> path(1,v);
+  while(parent[v] != v){
+    v = parent[v];
+    path.push_back(v);
+  }
+  reverse(path.begin(),path.end());
+  return path;
 }
 
 int main(){
@@ -44,4 +57,13 @@ int main(){
     if(dist[i]==INF) printf("INF\n");
     else printf("%d\n",dist[i]);
   }
+  for(int i=1;i<=V;i++){
+    printf("%d까지의 경로 : ",i);
+    vector<int> path = shortestPath(i);
+    for(int j=0;j<path.size();j++)
+      printf("%d ",path[j]);
+    printf("\n");
+  }
 }
+
+
