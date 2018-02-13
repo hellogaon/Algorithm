@@ -10,7 +10,7 @@ using namespace std;
 
 int V,E,S;
 vector<pair<int,int> > adj[MAX_V];
-vector<int> parent(MAX_V+1,-1);
+vector<int> parent(MAX_V,-1);
 
 vector<int> dijkstra(int src){
   vector<int> dist(V+1,INF);
