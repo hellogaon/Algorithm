@@ -1,11 +1,13 @@
+// 최소 스패닝 트리 - 크루스칼 알고리즘
+// 시간복잡도 O(|E|lg|E|)
 #include <cstdio>
 #include <vector>
 #include <algorithm>
+#define MAX_V 1001
 
 using namespace std;
 
 int V,E;
-const int MAX_V = 1001;
 vector<pair<int, int> > adj[MAX_V];
 
 struct DisjointSet{
@@ -30,6 +32,7 @@ struct DisjointSet{
 int kruskal(vector<pair<int,int> >& selected){
   int ret = 0;
   selected.clear();
+  // (가중치,(정점1, 정점2))
   vector<pair<int,pair<int,int> > > edges;
   for(int u=0;u<V;u++){
     for(int i=0;i<adj[u].size();i++){
@@ -41,7 +44,7 @@ int kruskal(vector<pair<int,int> >& selected){
   DisjointSet sets(V);
   for(int i=0;i<edges.size();i++){
     int cost = edges[i].first;
-    int u = edges[i].second.first, v= edges[i].second.second;
+    int u = edges[i].second.first, v = edges[i].second.second;
     if(sets.find(u)==sets.find(v)) continue;
     sets.merge(u,v);
     selected.push_back(make_pair(u,v));
@@ -53,9 +56,9 @@ int kruskal(vector<pair<int,int> >& selected){
 int main(){
   scanf("%d %d",&V,&E);
   for(int i=0;i<E;i++){
-    int a,b,c;
-    scanf("%d %d %d",&a,&b,&c);
-    adj[a].push_back(make_pair(b,c));
+    int A,B,C;
+    scanf("%d %d %d",&A,&B,&C);
+    adj[A-1].push_back(make_pair(B-1,C));
   }
   vector<pair<int,int> > selected;
   printf("%d\n",kruskal(selected));

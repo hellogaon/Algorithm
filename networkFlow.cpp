@@ -1,30 +1,34 @@
+// 네트워크 플로우
+// 시간복잡도 min(O(|E|f),O(|V||E|^2)
 #include <cstdio>
 #include <cstring>
 #include <queue>
 #include <vector>
+#define MAX_V 1001
+#define INF 987654321
 
 using namespace std;
 
-const int MAX_V = 1001;
-const int INF = 987654321;
-int V;
-//capacity[u][v] = u에서 v로 보낼 수 있는 용량
-//flow[u][v] = u에서 v로 흘러가는 유량 (방향이 반대일 경우 음수)
-int capacity[MAX_V][MAX_V], flow[MAX_V][MAX_V];
-//flow[][]를 계산하고 총 유량을 반환
-int networkFlow(int source, int sink){
-  memset(flow,0,sizeof(flow));
-  int totalFlow = 0;
+int V,S,E;
+vector<int> adj[MAX_V];
+// c[u][v] = u에서 v로 보낼 수 있는 용량
+// f[u][v] = u에서 v로 흘러가는 유량 (방향이 반대일 경우 음수)
+int c[MAX_V][MAX_V], f[MAX_V][MAX_V];
+// f[][]를 계산하고 총 유량을 반환
+int networkflow(int source, int sink){
+  memset(f,0,sizeof(f));
+  int totalflow = 0;
   while(true){
+    // 너비우선 탐색으로 증가 경로를 찾는다
     vector<int> parent(MAX_V,-1);
     queue<int> q;
     parent[source] = source;
     q.push(source);
     while(!q.empty() && parent[sink] == -1){
       int here = q.front(); q.pop();
-      for(int there = 0; there < V; there++){
-        if(capacity[here][there] - flow[here][there] > 0 &&
-          parent[there] == -1) {
+      for(int i=0;i<adj[here].size();i++){
+        int there = adj[here][i];
+        if(c[here][there] - f[here][there] > 0 && parent[there] == -1) {
           q.push(there);
           parent[there] = here;
         }
@@ -33,12 +37,24 @@ int networkFlow(int source, int sink){
     if(parent[sink] == -1) break;
     int amount = INF;
     for(int p = sink; p != source; p = parent[p])
-      amount = min(capacity[parent[p]][p] - flow[parent[p]][p],amount);
+      amount = min(c[parent[p]][p] - f[parent[p]][p],amount);
     for(int p = sink; p != source; p = parent[p]){
-      flow[parent[p]][p] += amount;
-      flow[p][parent[p]] -= amount;
+      f[parent[p]][p] += amount;
+      f[p][parent[p]] -= amount;
     }
-    totalFlow += amount;
+    totalflow += amount;
   }
-  return totalFlow;
+  return totalflow;
+}
+
+int main(){
+  scanf("%d %d %d",&V,&S,&E);
+  for(int i=0;i<V;i++){
+    int A,B,C;
+    scanf("%d %d %d",&A,&B,&C);
+    c[A][B] += C;
+    adj[A].push_back(B);
+    adj[B].push_back(A);
+  }
+  printf("%d\n",networkflow(S,E));
 }

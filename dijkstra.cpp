@@ -1,4 +1,5 @@
 // 다익스트라 알고리즘
+// 시간복잡도 O(|E|lg|V|)
 #include <cstdio>
 #include <queue>
 #include <vector>

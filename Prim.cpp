@@ -1,44 +1,57 @@
-//최소 스패닝 트리 - 프림 알고리즘
-//모든 노드를 이었을 때 최소 간선 비용
-#include <stdio.h>
+// 최소 스패닝 트리 - 프림 알고리즘
+// 시간복잡도 O(|E|lg|V|)
+#include <cstdio>
 #include <vector>
 #include <queue>
-
+#define MAX_V 10001
+#define INF 987654321
 using namespace std;
 
-class my_greater{
-public:
-  bool operator()(const pair<int,int>& arg1, const pair<int,int>& arg2) const{
-    return arg1.second > arg2.second;
-  }
-};
+int V,E;
+vector<pair<int,int> > adj[MAX_V];
 
-int V,E;  //노드수 간선수
-vector<vector<pair<int,int> > > adj(1001);
-vector<int> check(1001);
-priority_queue<pair<int,int>,vector<pair<int,int> >,my_greater> pq;
+// 주어진 그래프에 대해 최소 스패닝 트리에 포함된 간선의 목록을 selected에
+// 저장하고 가중치의 합을 반환한다.
+int prim(vector<pair<int,int> >& selected){
+  selected.clear();
+  // 해당 정점이 트리에 포함되어 있나?
+  vector<bool> added(V,false);
+  // 트리에 인접한 간선 중 해당 정점에 닿는 최소 간선의 정보를 저장한다.
+  vector<int> parent(V,-1);
+  priority_queue<pair<int,int> > pq;
 
-int prim(){
-  int N=0, ans=0;
-  pq.push(make_pair(1,0));
-  while(N!=V){
-    int id=pq.top().first, d=pq.top().second;
+  int ret = 0;
+  // 0번 정점을 시작점으로 항상 트리에 가장 먼저 추가한다.
+  pq.push(make_pair(0,0));
+  parent[0] = 0;
+  while(!pq.empty()){
+    int cost = -pq.top().first, u = pq.top().second;
     pq.pop();
-    if(check[id]==-1) continue;
-    check[id]=-1; N+=1; ans+=d;
-    for(int i=0;i<adj[id].size();i++)
-      pq.push(make_pair(adj[id][i]));
+    if(added[u]) continue;
+    //(parent[u],u)를 트리에 추가한다
+    if(parent[u] != u)
+      selected.push_back(make_pair(parent[u],u));
+    ret += cost;
+    added[u] = true;
+    for(int i=0;i<adj[u].size();i++){
+      int v = adj[u][i].first, weight = adj[u][i].second;
+      if(!added[v]){
+        parent[v] = u;
+        pq.push(make_pair(-weight,v));
+      }
+    }
   }
-  return ans;
+  return ret;
 }
 
 int main(){
   scanf("%d %d",&V,&E);
   for(int i=0;i<E;i++){
-    int u,v,w; //시작노드 끝노드 간선의크기
-    scanf("%d %d %d",&u,&v,&w);
-    adj[u].push_back(make_pair(v,w));
-    adj[v].push_back(make_pair(u,w));
+    int A,B,C;
+    scanf("%d %d %d",&A,&B,&C);
+    adj[A-1].push_back(make_pair(B-1,C));
+    adj[B-1].push_back(make_pair(A-1,C));
   }
-  printf("%d\n",prim());
+  vector<pair<int,int> > selected;
+  printf("%d\n",prim(selected));
 }
