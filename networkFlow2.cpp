@@ -46,28 +46,28 @@ int networkflow(int source, int sink){
   int totalflow = 0;
   while(true){
     // 너비우선 탐색으로 증가 경로를 찾는다
-    vector<int> parent(MAX_V,-1);
+    vector<int> par(MAX_V,-1);
     Edge* path[MAX_V];
     queue<int> q;
-    parent[source] = source;
+    par[source] = source;
     q.push(source);
-    while(!q.empty() && parent[sink] == -1){
+    while(!q.empty() && par[sink] == -1){
       int here = q.front(); q.pop();
       for(int i=0; i<adj[here].size();i++){
         Edge* e = adj[here][i];
         int there = e->t;
-        if(e->r() > 0 && parent[there] == -1) {
+        if(e->r() > 0 && par[there] == -1) {
           q.push(there);
-          parent[there] = here;
+          par[there] = here;
           path[there] = e;
         }
       }
     }
-    if(parent[sink] == -1) break;
+    if(par[sink] == -1) break;
     int amount = INF;
-    for(int p = sink; p != source; p = parent[p])
+    for(int p = sink; p != source; p = par[p])
       amount = min(amount,path[p]->r());
-    for(int p = sink; p != source; p = parent[p])
+    for(int p = sink; p != source; p = par[p])
       path[p]->push(amount);
     totalflow += amount;
   }

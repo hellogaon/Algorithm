@@ -20,27 +20,27 @@ int networkflow(int source, int sink){
   int totalflow = 0;
   while(true){
     // 너비우선 탐색으로 증가 경로를 찾는다
-    vector<int> parent(MAX_V,-1);
+    vector<int> par(MAX_V,-1);
     queue<int> q;
-    parent[source] = source;
+    par[source] = source;
     q.push(source);
-    while(!q.empty() && parent[sink] == -1){
+    while(!q.empty() && par[sink] == -1){
       int here = q.front(); q.pop();
       for(int i=0;i<adj[here].size();i++){
         int there = adj[here][i];
-        if(c[here][there] - f[here][there] > 0 && parent[there] == -1) {
+        if(c[here][there]-f[here][there] > 0 && par[there] == -1) {
           q.push(there);
-          parent[there] = here;
+          par[there] = here;
         }
       }
     }
-    if(parent[sink] == -1) break;
+    if(par[sink] == -1) break;
     int amount = INF;
-    for(int p = sink; p != source; p = parent[p])
-      amount = min(c[parent[p]][p] - f[parent[p]][p],amount);
-    for(int p = sink; p != source; p = parent[p]){
-      f[parent[p]][p] += amount;
-      f[p][parent[p]] -= amount;
+    for(int p = sink; p != source; p = par[p])
+      amount = min(c[par[p]][p] - f[par[p]][p],amount);
+    for(int p = sink; p != source; p = par[p]){
+      f[par[p]][p] += amount;
+      f[p][par[p]] -= amount;
     }
     totalflow += amount;
   }
