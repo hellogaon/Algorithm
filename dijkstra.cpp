@@ -16,7 +16,6 @@ vector<int> parent(MAX_V,-1);
 vector<int> dijkstra(int src){
   vector<int> dist(V+1,INF);
   dist[src]=0;
-  parent[src]=src;
   priority_queue<pair<int,int> > pq;
   pq.push(make_pair(0,src));
   while(!pq.empty()){
@@ -28,7 +27,6 @@ vector<int> dijkstra(int src){
       int nextDist = cost + adj[here][i].second;
       if(dist[there] > nextDist){
         dist[there] = nextDist;
-        parent[there] = here;
         pq.push(make_pair(-nextDist, there));
       }
     }

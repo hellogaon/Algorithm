@@ -1,4 +1,5 @@
 // 상호 베타적 집합 자료구조
+// 유니온 파인드
 #include <cstdio>
 #include <vector>
 #include <algorithm>
@@ -6,8 +7,8 @@
 using namespace std;
 
 struct DisjointSet{
-  vector<int> parent, rank;
-  DisjointSet(int n) : parent(n), rank(n,1){
+  vector<int> parent, rank, size;
+  DisjointSet(int n) : parent(n), rank(n,1), size(n,1){
     for(int i=0;i<n;i++)
       parent[i]=i;
   }
@@ -15,12 +16,14 @@ struct DisjointSet{
     if(u == parent[u]) return u;
     return parent[u] = find(parent[u]);
   }
-  void merge(int u, int v){
+  int merge(int u, int v){
     u = find(u); v = find(v);
-    if(u == v) return;
+    if(u == v) return size[v];
     if(rank[u] > rank[v]) swap(u,v);
     parent[u] = v;
     if(rank[u] == rank[v]) ++rank[v];
+    size[v] += size[u];
+    return size[v];
   }
 };
 

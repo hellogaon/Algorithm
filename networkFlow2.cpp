@@ -74,11 +74,6 @@ int networkflow(int source, int sink){
   return totalflow;
 }
 
-int ctoi(char c){
-  if(c <= 'Z') return c-'A';
-  return c-'a'+26;
-}
-
 int main(){
   scanf("%d %d %d",&V,&S,&E);
   for(int i=0;i<V;i++){

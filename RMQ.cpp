@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int MAX_INT = numeric_limits<int>::max();
+const int MAX_INT = 987654321;
 
 struct RMQ{
   int n;

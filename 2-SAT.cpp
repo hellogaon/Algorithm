@@ -72,7 +72,9 @@ int main(){
 		value[variable] = !isTrue;
 	}
 	
-	for(int i=1;i<=N;i++)
+	for(int i=1;i<=N;i++){
 		printf("%d ",value[i]);
+		return 0;
+	}
 	printf("\n");
 }

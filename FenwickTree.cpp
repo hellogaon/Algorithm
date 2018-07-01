@@ -3,21 +3,25 @@
 
 using namespace std;
 
+typedef long long ll;
+
 struct Fenwicktree {
-  vector<int> tree;
+  vector<ll> tree;
   Fenwicktree(int n) : tree(n+1) {}
-  //맨 오른쪽에 있는 1인 비트를 지우는 연산
-  int sum(int pos){
+  // sum(pos) : A[0...pos] 의 부분 합을 구한다.
+  // 맨 오른쪽에 있는 1인 비트를 지우는 연산
+  ll sum(int pos){
     ++pos;
-    int ret = 0;
+    ll ret = 0;
     while(pos > 0){
       ret += tree[pos];
       pos &= (pos-1);
     }
     return ret;
   }
-  //맨 오른쪽애 있는 1인 비트를 스스로에게 더해 주는 연산
-  void add(int pos, int val){
+  // A[pos]에 val을 더한다.
+  // 맨 오른쪽애 있는 1인 비트를 스스로에게 더해 주는 연산
+  void add(int pos, ll val){
     ++pos;
     while(pos < tree.size()){
       tree[pos] += val;
@@ -27,18 +31,21 @@ struct Fenwicktree {
 };
 
 int main(){
-  int N,M,K;
-  scanf("%d %d %d",&N,&M,&K);
+  int N,M;
+  scanf("%d %d",&N,&M);
   vector<int> v(N+1);
   Fenwicktree tree(N+1);
-  for(int i=1;i<=N;i++){
-    scanf("%d",&v[i]);
-    tree.add(i,v[i]);
-  }
-  for(int i=0;i<M+K;i++){
+  for(int i=0;i<M;i++){
     int A,B,C;
     scanf("%d %d %d",&A,&B,&C);
-    if(A==1) tree.add(B,C-v[B]), v[B]=C;
-    else printf("%d\n",tree.sum(C)-tree.sum(B-1));
+    if(A == 0){
+      if(B > C) swap(B,C);
+      printf("%lld\n",tree.sum(C)-tree.sum(B-1));
+    }
+    else{
+      tree.add(B,C-v[B]);
+      v[B] = C;
+    }
   }
 }
+

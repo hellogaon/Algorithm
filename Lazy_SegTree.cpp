@@ -38,7 +38,6 @@ struct SegTree{
   int query(int left, int right){
     return query(left, right, 1, 0, n-1);
   }
-
   void update_lazy(int left, int right, int node){
     // lazy값이 존재 할 경우
     if(lazy[node] != 0){
@@ -52,22 +51,25 @@ struct SegTree{
     }
   }
   // left~right구간을 diff만큼 증가하였을 때 node를 루트로 하는 구간트리를 갱신
-  void update(int left, int right, int diff, int node, int nodeLeft, int nodeRight){
+  void update_range(int left, int right, int diff, int node, int nodeLeft, int nodeRight){
     update_lazy(nodeLeft,nodeRight,node);
     if(right < nodeLeft || nodeRight < left) return;
     if(left <= nodeLeft && nodeRight <= right){
-      lazy[node] += diff;
-      update_lazy(nodeLeft,nodeRight,node);
+      rangeSum[node] += (nodeRight-nodeLeft+1)*diff;
+      if(nodeLeft != nodeRight){
+        lazy[node*2] += diff;
+        lazy[node*2+1] += diff;
+      }
       return;
     }
     int mid = (nodeLeft + nodeRight) / 2;
-    update(left, right, diff, node*2, nodeLeft, mid);
-    update(left, right, diff, node*2+1, mid+1, nodeRight);
+    update_range(left, right, diff, node*2, nodeLeft, mid);
+    update_range(left, right, diff, node*2+1, mid+1, nodeRight);
     // 마지막에 자식들의 값을 사용해 다시 자신의 값 갱신
     rangeSum[node] = rangeSum[node*2] + rangeSum[node*2+1];
   }
-  void update(int left, int right, int diff){
-    update(left, right, diff, 1, 0, n-1);
+  void update_range(int left, int right, int diff){
+    update_range(left, right, diff, 1, 0, n-1);
   }
 };
 
@@ -86,7 +88,7 @@ int main(){
     if(a==1){
       int b,c,d;
       scanf("%d %d %d",&b,&c,&d);
-      ST->update(b-1,c-1,d);
+      ST->update_range(b-1,c-1,d);
     }
     if(a==2){
       int b,c;
