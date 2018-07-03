@@ -136,16 +136,6 @@ double area(const vector<vector2>& p){
   return fabs(ret) / 2.0;
 }
 
-//주어진 단순 다각형 p의 넓이
-double area(const vector<vector2>& p){
-  double ret = 0;
-  for(int i=0;i<p.size();i++){
-    int j=(i+1)%p.size();
-    ret += p[i].cross(p[j]);
-  }
-  return fabs(ret) / 2.0;
-}
-
 //점 q가 다각형 p안에 포함되어 있을 경우 참, 아닌 경우 거짓
 //q가 다각형의 경계 위에 있는 경우의 반환 값은 정의 X
 bool isInside(vector2 q, const vector<vector2>& p){
@@ -160,6 +150,19 @@ bool isInside(vector2 q, const vector<vector2>& p){
     }
   }
   return crosses % 2 > 0;
+}
+
+//두 다각형이 서로 닿거나 겹치는 지 여부를 반환
+//한 점이라도 겹친다면 true
+bool polygonIntersects(const polygon& p, const polygon& q){
+  int n=p.size(), m=q.size();
+  //한 다각형이 다른 다각형에 포함되어 있는 경우
+  if(isInside(p[0],q) || isInside(q[0],p)) return true;
+  for(int i=0;i<n;i++)
+    for(int j=0;j<m;j++)
+      if(segmentIntersects(p[i],p[(i+1)%n],q[j],q[(j+1)%m]))
+        return true;
+  return false;
 }
 
 //서덜랜드 호지맨 알고리즘을 이용한 다각형 클리핑
@@ -191,41 +194,39 @@ polygon intersection(const polygon& p, double x1, double y1, double x2, double y
   return ret;
 }
 
-//볼록 껍질을 찾는 선물 포장 알고리즘 O(N^2) (그라함스캔 -> O(NlogN))
+//볼록 껍질을 찾는 그라함스캔 알고리즘 O(NlogN)
 typedef vector<vector2> polygon;
 //points에 있는 점들을 모두 포함하는 최소의 볼록다각형
-polygon giftWrap(const vector<vector2>& points){
+vector2 pivot;
+bool cmp(const vector2& a, const vector2& b){
+  long long val = ccw(pivot, a, b);
+  if(val > 0) return true;
+  if(val < 0) return false;
+  return (a-pivot).norm() < (b-pivot).norm();
+}
+polygon grahamScan(vector<vector2>& points){
   int n = points.size();
+  //pivot점을 제일 아래 제일 왼쪽으로 지정
+  int leastY = 0;
+  for(int i=1;i<n;i++){
+    if(points[i].y < points[leastY].y)
+      leastY = i;
+    else if(points[i].y == points[leastY].y)
+      if(points[i].x < points[leastY].x)
+        leastY = i;
+  }
+  swap(points[0],points[leastY]);
+  pivot = points[0];
+  //0번을 제외한 점들을 반시계 방향으로 정렬
+  sort(points.begin()+1,points.end(),cmp);
   polygon hull;
-  vector2 pivot = *min_element(points.begin(),points.end());
-  hull.push_back(pivot);
-  while(true){
-    //ph에서 시작하는 벡터가 가장 왼쪽인 점 next를 찾기
-    //평행인 점이 여러 개 있으면 가장 먼 것
-    vector2 ph = hull.back(), next = points[0];
-    for(int i=1;i<n;i++){
-      double cross = ccw(ph,next,points[i]);
-      double dist = (next-ph).norm()-(points[i]-ph).norm();
-      if(cross>0 || (cross==0 && dist<0))
-        next=points[i];
-    }
-    if(next==pivot) break;
-    hull.push_back(next);
+  for(int i=0;i<n;i++){
+    //스택에 2개 이상의 점이 남아 있는 한 스택 최상단 점 2개와 다음 점의 관계가 CCW일 때까지 pop
+    while(hull.size() >= 2 && ccw(hull[hull.size()-2], hull.back(), points[i]) <= 0)
+      hull.pop_back();
+    hull.push_back(points[i]);
   }
   return hull;
-}
-
-//두 다각형이 서로 닿거나 겹치는 지 여부를 반환
-//한 점이라도 겹친다면 true
-bool polygonIntersects(const polygon& p, const polygon& q){
-  int n=p.size(), m=q.size();
-  //한 다각형이 다른 다각형에 포함되어 있는 경우
-  if(isInside(p[0],q) || isInside(q[0],p)) return true;
-  for(int i=0;i<n;i++)
-    for(int j=0;j<m;j++)
-      if(segmentIntersects(p[i],p[(i+1)%n],q[j],q[(j+1)%m]))
-        return true;
-  return false;
 }
 
 //불록 다각형의 지름을 재는 회전하는 캘리퍼스 알고리즘
