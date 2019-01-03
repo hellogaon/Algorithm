@@ -1,5 +1,3 @@
-#include <cstdio>
-
 int gcd(int a, int b){
   return b ? gcd(b, a%b) : a;
 }
@@ -16,7 +14,7 @@ int extended_gcd(int a, int b, int &s, int &t){
     return a;
   }
   int q = a/b, r = a%b, sp, tp;
-  int g = ee(b,r,sp,tp);
+  int g = extended_gcd(b,r,sp,tp);
   s = tp; t = sp-tp*q;
   return g;
 }
