@@ -1,16 +1,8 @@
-#include <cstdio>
-#include <cmath>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 const double PI = 2.0 * acos(0.0);
 
 struct vector2{
   double x,y;
   explicit vector2(double x_ = 0, double y_ = 0) : x(x_), y(y_){}
-  //벡터 비교
   bool operator == (const vector2& rhs) const{
     return x == rhs.x && y == rhs.y;
   }
@@ -54,7 +46,7 @@ struct vector2{
 };
 
 //세 점 p,a,b가 주어졌을 때, a가 b보다 p에 얼마나 더 가까운 지
-double howMuchCloser(vector2 p, vector2 a, vector2 b){
+double closer(vector2 p, vector2 a, vector2 b){
   return (b - p).norm() - (a - p).norm();
 }
 
@@ -71,15 +63,16 @@ double ccw(vector2 p, vector2 a, vector2 b){
 //(a,b)를 포함하는 선과 (c,d)를 포함하는 선의 교점을 x에 반환
 //두 선이 평행이면 거짓, 아니면 참
 const double EPSILON = 1e-9;
-bool lineIntersection(vector2 a, vector2 b, vector2 c, vector2 d, vector2& x){
-  double det = (b - a).cross(d- c);
+bool lineIs(vector2 a, vector2 b, vector2 c, vector2 d, vector2& x){
+  double det = (b - a).cross(d - c);
   if(fabs(det) < EPSILON) return false;
   x = a + (b - a) * ((c - a).cross(d - c) / det);
   return true;
 }
 
-//(a,b) (c,d)가 평행한 두 선분일 때 이들이 한 점에서 겹치는 지 확인
-bool parallelSegments(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
+//(a,b) (c,d)가 평행한 두 선분일 때 이들이 겹치는 지 확인
+//겹칠 경우 선분의 교점을 p에 반환
+bool paraSeg(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
   if(b < a) swap(a,b);
   if(d < c) swap(c,d);
   //한 직선 위에 없거나 두 선분이 겹치지 않는 경우
@@ -89,23 +82,23 @@ bool parallelSegments(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
   return true;
 }
 //a,b,p가 일직선에 있다고 가정 할 때, a,b를 잇는 선분위에 p가 있는 지
-bool inBoundingRectangle(vector2 p, vector2 a, vector2 b){
+bool inSeg(vector2 p, vector2 a, vector2 b){
   if(b < a) swap(a,b);
   return p==a || p==b || (a<p && p<b);
 }
 //(a,b)선분과 (c,d)선분의 교점을 p에 반환
 //교점이 여러 개일 경우 아무 점 이나 반환
 //두 선분이 교차하지 않을 경우 false를 반환
-bool segmentIntersection(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
+bool segIs(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
   //두 직선이 평행인 경우
-  if(!lineIntersection(a,b,c,d,p))
-    return parallelSegments(a,b,c,d,p);
+  if(!lineIs(a,b,c,d,p))
+    return paraSeg(a,b,c,d,p);
   //p가 두 선분에 포함되어 있는 경우에만 참
-  return inBoundingRectangle(p,a,b) && inBoundingRectangle(p,c,d);
+  return inSeg(p,a,b) && inSeg(p,c,d);
 }
 
 //두 선분이 서로 접촉하는 지 여부를 반환
-bool segmentIntersects(vector2 a, vector2 b, vector2 c, vector2 d){
+bool segIs2(vector2 a, vector2 b, vector2 c, vector2 d){
   double ab = ccw(a,b,c) * ccw(a,b,d);
   double cd = ccw(c,d,a) * ccw(c,d,b);
   //두 선분이 한 직선 위에 있거나 끝 점이 겹치는 경우
@@ -118,12 +111,12 @@ bool segmentIntersects(vector2 a, vector2 b, vector2 c, vector2 d){
 }
 
 //점 p에서 (a,b) 직선에 내린 수선의 발
-vector2 perpendicularFoot(vector2 p, vector2 a, vector2 b){
+vector2 foot(vector2 p, vector2 a, vector2 b){
   return a + (p-a).project(b-a);
 }
 //점 p와 (a,b) 직선 사이의 거리
-double pointToLine(vector2 p, vector2 a, vector2 b){
-  return (p - perpendicularFoot(p,a,b)).norm();
+double dist(vector2 p, vector2 a, vector2 b){
+  return (p - foot(p,a,b)).norm();
 }
 
 //주어진 단순 사각형 p의 넓이 p는 각 꼭지점의 위치 벡터의 집합
@@ -138,7 +131,7 @@ double area(const vector<vector2>& p){
 
 //점 q가 다각형 p안에 포함되어 있을 경우 참, 아닌 경우 거짓
 //q가 다각형의 경계 위에 있는 경우의 반환 값은 정의 X
-bool isInside(vector2 q, const vector<vector2>& p){
+bool isIn(vector2 q, const vector<vector2>& p){
   int crosses = 0;
   for(int i=0;i<p.size();i++){
     int j = (i+1)%p.size();
@@ -154,13 +147,13 @@ bool isInside(vector2 q, const vector<vector2>& p){
 
 //두 다각형이 서로 닿거나 겹치는 지 여부를 반환
 //한 점이라도 겹친다면 true
-bool polygonIntersects(const polygon& p, const polygon& q){
+bool polyIs(const polygon& p, const polygon& q){
   int n=p.size(), m=q.size();
   //한 다각형이 다른 다각형에 포함되어 있는 경우
-  if(isInside(p[0],q) || isInside(q[0],p)) return true;
+  if(isIn(p[0],q) || isIn(q[0],p)) return true;
   for(int i=0;i<n;i++)
     for(int j=0;j<m;j++)
-      if(segmentIntersects(p[i],p[(i+1)%n],q[j],q[(j+1)%m]))
+      if(segIs2(p[i],p[(i+1)%n],q[j],q[(j+1)%m]))
         return true;
   return false;
 }
@@ -176,16 +169,16 @@ polygon cutPoly(const polygon& p, const vector2& a, const vector2& b){
   polygon ret;
   for(int i=0;i<n;i++){
     int j=(i+1)%n;
-    if(inside[i]) ret.push_back(p[i]);
+    if(inside[i]) ret.pb(p[i]);
     if(inside[i]!=inside[j]){
       vector2 cross;
-      if(lineIntersection(p[i],p[j],a,b,cross))
-        ret.push_back(cross);
+      if(lineIs(p[i],p[j],a,b,cross))
+        ret.pb(cross);
     }
   }
   return ret;
 }
-polygon intersection(const polygon& p, double x1, double y1, double x2, double y2){
+polygon Is(const polygon& p, double x1, double y1, double x2, double y2){
   vector2 a(x1,y1),b(x2,y1),c(x2,y2),d(x1,y2);
   polygon ret = cutPoly(p,a,b);
   ret = cutPoly(ret,b,c);
@@ -225,7 +218,7 @@ polygon grahamScan(vector<vector2>& points){
     //스택에 2개 이상의 점이 남아 있는 한 스택 최상단 점 2개와 다음 점의 관계가 CCW일 때까지 pop
     while(hull.size() >= 2 && ccw(hull[hull.size()-2], hull.back(), points[i]) <= 0)
       hull.pop_back();
-    hull.push_back(points[i]);
+    hull.pb(points[i]);
   }
   return hull;
 }
