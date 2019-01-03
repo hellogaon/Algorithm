@@ -1,20 +1,13 @@
-//벨만-포드 알고리즘
+//벨만포드: O(VE)
 //단일 시작점 최단 경로 알고리즘 시작 정점 s에서부터 다른 정점까지의 최단거리
 //간선의 비용이 음수일 때도 사용 가능 
-//시간복잡도 - O(VE)
-#include <cstdio>
-#include <vector>
-#define MAX_V 501
-#define INF 987654321
-
-using namespace std;
+const int MAXN = 501;
 
 int V,E;
-vector<pair<int,int> >  adj[MAX_V];
+vector<pii> adj[MAXN];
 
 // 음수 사이클이 있을 경우 텅 빈 배열을 반환
-vector<int> bellmanFord(int src){
-	// 시작점을 제외한 모든 정점까지의 최단 거리 상한을 INF로 둔다.
+vector<int> BF(int src){
 	vector<int> upper(V+1, INF);
 	upper[src] = 0;
 	bool updated;
@@ -31,7 +24,6 @@ vector<int> bellmanFord(int src){
 			}
 		if(!updated) break;
 	}
-	// V번째 순회에서도 완화가 성공했다면 음수사이클이 있다.
 	if(updated) upper.clear();
 	return upper; 
 }
@@ -41,12 +33,8 @@ int main(){
 	for(int i=0;i<E;i++){
 		int A,B,C;
 		scanf("%d %d %d",&A,&B,&C);
-		adj[A].push_back(make_pair(B,C));
+		adj[A].pb(mp(B,C));
 	}
-	vector<int> dist = bellmanFord(1);
-	
-	if(dist.empty()) return printf("-1\n");
-
-	for(int i=2;i<=V;i++)
-		printf("%d\n",dist[i]!=INF ? dist[i] : -1);
+	vector<int> dist = BF(1);
+	if(dist.empty()) printf("-1\n");
 }

@@ -1,46 +1,43 @@
-// 무향그래프에서 절단선 찾는 알고리즘
-#include <cstdio>
-#include <vector>
-#include <algorithm>
+//무향그래프에서 삭제했을 그래프가 두 개 이상의 컴포넌트로 분리되는 간선
+const int MAXN = 10001;
 
-using namespace std;
+int V,E,cnt;
+vector<vector<int> > adj(MAXN);
+vector<int> visited(MAXN,-1);
+vector<pii> isCB;
 
-int V,E,counter;
-vector<vector<int> > adj(100001);
-vector<int> discovered(100001,-1);
-vector<pair<int,int> > isCutBridge;
-
-int findCutBridge(int here, int parent){
-	discovered[here] = counter++;
-	int ret = discovered[here];
+int findCB(int here, int par){
+	visited[here] = cnt++;
+	int ret = visited[here];
 	for(int i=0;i<adj[here].size();i++){
 		int there = adj[here][i];
-		if(there == parent) continue;
-		if(discovered[there] == -1){
-			int subtree = findCutBridge(there,here);
-			if(subtree > discovered[here])
-				isCutBridge.push_back(make_pair(min(here,there),max(here,there)));
+		if(there == par) continue;
+		if(visited[there] == -1){
+			int subtree = findCB(there,here);
+			if(subtree > visited[here])
+				isCB.pb(mp(min(here,there),max(here,there)));
 			ret = min(ret,subtree);
 		}
 		else
-			ret = min(ret,discovered[there]);
+			ret = min(ret,visited[there]);
 	}
 	return ret;
 }
+
 int main(){
 	scanf("%d %d",&V,&E);
 	for(int i=0;i<E;i++){
 		int A,B;
 		scanf("%d %d",&A,&B);
-		adj[A].push_back(B);
-		adj[B].push_back(A);
+		adj[A].pb(B);
+		adj[B].pb(A);
 	}
 	for(int i=1;i<=V;i++){
-		if(discovered[i]==-1)
-			findCutBridge(i,0);
+		if(visited[i] == -1)
+			findCB(i, 0);
 	}
-	printf("%lu\n",isCutBridge.size());
-	sort(isCutBridge.begin(),isCutBridge.end());
-	for(int i=0;i<isCutBridge.size();i++)
-		printf("%d %d\n",isCutBridge[i].first,isCutBridge[i].second);
+	printf("%lu\n",isCB.size());
+	sort(isCB.begin(),isCB.end());
+	for(int i=0;i<isCB.size();i++)
+		printf("%d %d\n",isCB[i].first,isCB[i].second);
 }

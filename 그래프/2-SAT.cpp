@@ -1,37 +1,30 @@
-//SCC를 응용한 2-SAT문제
 //논리식을 논리곱 정규형으로 표현했을 때 각 절에 두 개의 변수만이 존재하는 경우에 대해 참인 결과를 내보낸다.
-#include <cstdio>
-#include <vector>
-#include <stack>
-#include <algorithm>
-
-using namespace std;
-
 const int vars = 10001;
+
 vector<vector<int> > adj(vars*2);
 vector<int> sccId(vars*2,-1);
-vector<int> discovered(vars*2,-1);
+vector<int> visited(vars*2,-1);
 stack<int> st;
-int sccCounter, vertexCounter;
+int scccnt, vcnt;
 
 int scc(int here){
-	int ret = discovered[here] = vertexCounter++;
+	int ret = visited[here] = vcnt++;
 	st.push(here);
 	for(int i=0;i<adj[here].size();i++){
 		int there = adj[here][i];
-		if(discovered[there] == -1)
+		if(visited[there] == -1)
 			ret = min(ret, scc(there));
 		else if(sccId[there] == -1)
-			ret = min(ret, discovered[there]);
+			ret = min(ret, visited[there]);
 	}
-	if(ret == discovered[here]){
+	if(ret == visited[here]){
 		while(true){
 			int t = st.top();
 			st.pop();
-			sccId[t] = sccCounter;
+			sccId[t] = scccnt;
 			if(t == here) break;
 		}
-		++sccCounter;
+		++scccnt;
 	}
 	return ret;
 }
@@ -46,21 +39,23 @@ int main(){
 		scanf("%d %d",&A,&B);
 		A = (A>0 ? A*2 : -A*2+1);
 		B = (B>0 ? B*2 : -B*2+1);
-		adj[opp(A)].push_back(B);
-		adj[opp(B)].push_back(A);
+		adj[opp(A)].pb(B);
+		adj[opp(B)].pb(A);
 	}
 	for(int i=2;i<2*(N+1);i++)
-		if(discovered[i] == -1) scc(i);
+		if(visited[i] == -1) scc(i);
 	for(int i=2;i<2*(N+1);i+=2)
-		if(sccId[i] == sccId[i+1])
-			return printf("0\n");
+		if(sccId[i] == sccId[i+1]){
+			printf("0\n");
+			return 0;
+		}
 	printf("1\n");
 
 	// // SCC번호의 역순으로 각 정점을 정렬하면 위상 정렬 순서가 된다.
 	vector<int> value(vars*2, -1);
-	vector<pair<int, int> > order;
+	vector<pii> order;
 	for(int i=2;i<2*(N+1);i++)
-		order.push_back(make_pair(-sccId[i],i));
+		order.pb(mp(-sccId[i],i));
 	sort(order.begin(), order.end());
 
 	for(int i=0;i<2*N;i++){
