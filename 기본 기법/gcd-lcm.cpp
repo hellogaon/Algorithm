@@ -1,20 +1,21 @@
-int gcd(int a, int b){
+ll gcd(ll a, ll b){
   return b ? gcd(b, a%b) : a;
 }
 
-int lcm(int a, int b){
+ll lcm(ll a, ll b){
   return a*b/gcd(a,b);
 }
 
 //확장 유클리드 호제법
 //as + bt = gcd(a,b)에서의 s,t 값을 구한다.
-int extended_gcd(int a, int b, int &s, int &t){
+//해가 존재하려면 As + Bt = C에서 C가 gcd(A,B)의 배수여야 한다.
+ll extended_gcd(ll a, ll b, ll &s, ll &t){
   if(!b){
     s = 1, t = 0;
     return a;
   }
-  int q = a/b, r = a%b, sp, tp;
-  int g = extended_gcd(b,r,sp,tp);
+  ll q = a/b, r = a%b, sp, tp;
+  ll g = extended_gcd(b,r,sp,tp);
   s = tp; t = sp-tp*q;
   return g;
 }
