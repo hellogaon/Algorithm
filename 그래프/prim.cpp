@@ -1,4 +1,4 @@
-//프림: O(V^2+E)
+//프림: O(ElgV)
 const int MAXN = 1001;
 
 int V,E;
