@@ -193,7 +193,7 @@ typedef vector<vector2> polygon;
 //points에 있는 점들을 모두 포함하는 최소의 볼록다각형
 vector2 pivot;
 bool cmp(const vector2& a, const vector2& b){
-  long long val = ccw(pivot, a, b);
+  double val = ccw(pivot, a, b);
   if(val > 0) return true;
   if(val < 0) return false;
   return (a-pivot).norm() < (b-pivot).norm();
@@ -229,17 +229,15 @@ double diameter(const polygon& p){
   int n = p.size();
   int left = min_element(p.begin(),p.end())-p.begin();
   int right = max_element(p.begin(),p.end())-p.begin();
-  vector2 calipersA(0,1);
+  vector2 calipersA;
   double ret = (p[right]-p[left]).norm();
-  //toNext[i]=p[i]에서 다음점까지의 방향을 나타내는 단위벡터
   vector<vector2> toNext(n);
   for(int i=0;i<n;i++)
-    toNext[i] = (p[(i+1)%n]-p[i]).normalize();
+    toNext[i] = p[(i+1)%n]-p[i];
   int a = left, b = right;
-  while(a != right || b != left){
-    double cosThetaA = calipersA.dot(toNext[a]);
-    double cosThetaB = -calipersA.dot(toNext[b]);
-    if(cosThetaA > cosThetaB){ //thetaA < thetaB
+  for(int i=0;i<p.size();i++){
+    if(toNext[a].cross(toNext[b]) <= 0){
+      //thetaA < thetaB
       calipersA = toNext[a];
       a = (a + 1) % n;
     }
@@ -247,7 +245,7 @@ double diameter(const polygon& p){
       calipersA = toNext[b] * (-1.0);
       b = (b + 1) % n;
     }
-    ret = max(ret,(p[a]-p[b]).norm());
+    ret = max(ret,((p[a]-p[b]).norm()));
   }
   return ret;
 }

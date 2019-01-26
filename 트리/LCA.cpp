@@ -39,7 +39,7 @@ int main(){
   dfs(1);
   for(int j=0;j<MAXC-1;j++)
     for(int i=2;i<=N;i++)
-        par[i][j+1]=par[par[i][j]][j];
+      par[i][j+1]=par[par[i][j]][j];
   scanf("%d",&M);
   for(int i=0;i<M;i++){
     int u,v;
