@@ -14,9 +14,9 @@ pii MCMF(int src, int sink){
   int mcmf = 0;
   int tf = 0;
   while(true){
-    vector<int> par(MAX_V,-1);
-    vector<int> dist(MAX_V,INF);
-    vector<bool> inQ(MAX_V,false);
+    vector<int> par(MAXN,-1);
+    vector<int> dist(MAXN,INF);
+    vector<bool> inQ(MAXN,false);
     queue<int> q;
     par[src] = src;
     dist[src] = 0;
