@@ -47,12 +47,12 @@ int networkflow(int s, int e){
     while(!q.empty() && par[e] == -1){
       int here = q.front(); q.pop();
       for(int i=0; i<adj[here].size();i++){
-        Edge* e = adj[here][i];
-        int there = e->t;
-        if(e->r() > 0 && par[there] == -1) {
+        Edge* ed = adj[here][i];
+        int there = ed->t;
+        if(ed->r() > 0 && par[there] == -1) {
           q.push(there);
           par[there] = here;
-          path[there] = e;
+          path[there] = ed;
         }
       }
     }
