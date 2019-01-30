@@ -25,16 +25,16 @@ struct SegTree{
   ll query(int l, int r){
     return query(l, r, 1, 0, n-1);
   }
-  //array[index]=newValue로 바뀌었을 때 node를 루트로 하는 구간트리를 갱신
-  ll update(int index, ll newValue, int node, int nl, int nr){
-    if(index < nl || nr < index) return sum[node];
-    if(nl == nr) return sum[node] = newValue;
+  //array[idx]=val로 바뀌었을 때 node를 루트로 하는 구간트리를 갱신
+  ll update(int idx, ll val, int node, int nl, int nr){
+    if(idx < nl || nr < idx) return sum[node];
+    if(nl == nr) return sum[node] = val;
     int mid = (nl + nr) / 2;
-    return sum[node] = update(index, newValue, node*2, nl, mid) +
-              update(index, newValue, node*2+1, mid+1, nr);
+    return sum[node] = update(idx, val, node*2, nl, mid) +
+              update(idx, val, node*2+1, mid+1, nr);
   }
-  ll update(int index, ll newValue){
-    return update(index, newValue, 1, 0, n-1);
+  ll update(int idx, ll val){
+    return update(idx, val, 1, 0, n-1);
   }
   void update_lazy(int l, int r, int node){
     if(lazy[node] != 0){
