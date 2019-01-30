@@ -68,13 +68,13 @@ struct PersistentSegTree{
     return sum(node[curr.lNum],l,r) + sum(node[curr.rNum],l,r);
   }
   //인덱스 [l, r] 내에서 k번째로 작은 값을 찾아온다. (k는 0-based)
-  int getKth(int l, int r, int k){
-    return getKth(node[root[l-1]], node[root[r]], k);
+  int kth(int l, int r, int k){
+    return kth(node[root[l-1]], node[root[r]], k);
   }
-  int getKth(Node &sNode, Node &eNode, int k){
+  int kth(Node &sNode, Node &eNode, int k){
     if(eNode.nl == eNode.nr) return eNode.nl;
     int pivot = node[eNode.lNum].val - node[sNode.lNum].val;
-    if(k < pivot) return getKth(node[sNode.lNum],node[eNode.lNum],k);
-    else return getKth(node[sNode.rNum],node[eNode.rNum],k-pivot);
+    if(k < pivot) return kth(node[sNode.lNum],node[eNode.lNum],k);
+    else return kth(node[sNode.rNum],node[eNode.rNum],k-pivot);
   }
 };
