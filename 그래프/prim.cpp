@@ -1,8 +1,8 @@
 //프림: O(ElgV)
-const int MAXN = 1001;
+const int MAXV = 1001;
 
 int V,E;
-vector<pii> adj[MAXN];
+vector<pii> adj[MAXV];
 
 int prim(vector<pii>& edges){
   edges.clear();

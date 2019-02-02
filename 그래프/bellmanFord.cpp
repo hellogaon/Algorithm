@@ -1,10 +1,10 @@
 //벨만포드: O(VE)
 //단일 시작점 최단 경로 알고리즘 시작 정점 s에서부터 다른 정점까지의 최단거리
 //간선의 비용이 음수일 때도 사용 가능 
-const int MAXN = 501;
+const int MAXV = 501;
 
 int V,E;
-vector<pii> adj[MAXN];
+vector<pii> adj[MAXV];
 
 // 음수 사이클이 있을 경우 텅 빈 배열을 반환
 vector<int> BF(int src){

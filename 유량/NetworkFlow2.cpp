@@ -1,5 +1,6 @@
 // 네트워크 플로우 인접리스트로 구현
-const int MAXN = 1001;
+// 시간복잡도 min(O(|E|f),O(|V||E|^2)
+const int MAXV = 1001;
 
 // 간선 구조체
 struct Edge {
@@ -17,20 +18,12 @@ struct Edge {
 
 int V,S,E;
 // 유량 네트워크의 인접리스트
-vector<Edge*> adj[MAXN];
+vector<Edge*> adj[MAXV];
 // u에서 v로 가는 간선을 추가
 void addEdge(int u, int v, int c){
   Edge* uv = new Edge(), *vu = new Edge();
-  // u에서 v로 가는 간선을 초기화한다.
-  uv->t = v;
-  uv->c = c;
-  uv->f = 0;
-  uv->rev = vu;
-  // v에서 u로 가는 간선을 초기화한다. 이 간선의 용량은 0이다
-  vu->t = u;
-  vu->c = 0;
-  vu->f = 0;
-  vu->rev = uv;
+  uv->t = v; uv->c = c; uv->f = 0; uv->rev = vu;
+  vu->t = u; vu->c = 0; vu->f = 0; vu->rev = uv;
   adj[u].pb(uv);
   adj[v].pb(vu);
 }
@@ -39,8 +32,8 @@ int networkflow(int s, int e){
   int ret = 0;
   while(true){
     // 너비우선 탐색으로 증가 경로를 찾는다
-    vector<int> par(MAXN,-1);
-    Edge* path[MAXN];
+    vector<int> par(MAXV,-1);
+    Edge* path[MAXV];
     queue<int> q;
     par[s] = s;
     q.push(s);

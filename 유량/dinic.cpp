@@ -1,7 +1,7 @@
 //디닉: O(V^2E)
-const int MAXN = 1005;
-const int S = MAXN-2;
-const int E = MAXN-1;
+const int MAXV = 1005;
+const int S = MAXV-2;
+const int E = MAXV-1;
 
 struct Edge{
   int t,c,f;
@@ -13,8 +13,8 @@ struct Edge{
   }
 };
 
-int level[MAXN], work[MAXN];
-vector<Edge*> adj[MAXN];
+int level[MAXV], work[MAXV];
+vector<Edge*> adj[MAXV];
 
 void addEdge(int u, int v, int c){
   Edge* uv = new Edge(), *vu = new Edge();
@@ -24,23 +24,23 @@ void addEdge(int u, int v, int c){
   adj[v].pb(vu);
 }
 
-bool bfs(){
+bool bfs(int s, int e){
   memset(level,-1,sizeof(level));
-  level[S] = 0;
+  level[s] = 0;
   queue<int> q;
-  q.push(S);
+  q.push(s);
   while(!q.empty()){
     int here = q.front(); q.pop();
     for(int i=0;i<adj[here].size();i++){
-      Edge* e = adj[here][i];
-      int there = e->t;
-      if(e->r() > 0 && level[there] == -1){
+      Edge* ed = adj[here][i];
+      int there = ed->t;
+      if(ed->r() > 0 && level[there] == -1){
         q.push(there);
         level[there] = level[here] + 1;
       }
     }
   }
-  return level[E] != -1;
+  return level[e] != -1;
 }
 
 int dfs(int here, int sink, int flow){
@@ -61,35 +61,29 @@ int dfs(int here, int sink, int flow){
 
 int solve(int s, int e){
   int ret = 0;
-  while(bfs()){
+  while(bfs(s,e)){
     memset(work,0,sizeof(work));
     while(1){
-      int flow = dfs(S,E,INF);
+      int flow = dfs(s,e,INF);
       if(flow == 0) break;
       ret += flow;
     }
   }
   return ret;
 }
+
+const int NEW_S = MAXV-4;
+const int NEW_E = MAXV-3;
+int lsum;
 
 void add_LR_edge(int u, int v, int l, int r){
   lsum += l;
-  addEdge(u+2,v+2,r-l);
-  addEdge(NEW_S,v+2,l);
-  addEdge(u+2,NEW_E,l);
+  addEdge(u,v,r-l);
+  addEdge(NEW_S,v,l);
+  addEdge(u,NEW_E,l);
 }
 
-lsum = 0;
-int solveLR(int s, int e){
-  addEdge(e+2,s+2,INF);
-  int ret = 0;
-  while(bfs()){
-    memset(work,0,sizeof(work));
-    while(1){
-      int flow = dfs(NEW_S,NEW_E,INF);
-      if(flow == 0) break;
-      ret += flow;
-    }
-  }
-  return ret;
+bool solveLR(int s, int e){
+  addEdge(e,s,INF);
+  return lsum == solve(NEW_S,NEW_E);
 }

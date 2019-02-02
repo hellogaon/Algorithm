@@ -1,11 +1,11 @@
 //다익스트라: O(ElgV)
 //딘일 시작점 최단 경로 알고리즘 시작 정점 s에서부터 다른 정점까지의 최단거리
 //모든 거리의 비용이 음수가 아닐 경우
-const int MAXN = 501;
+const int MAXV = 501;
 
 int V,E;
-vector<pii> adj[MAXN];
-vector<int> par(MAXN,-1);
+vector<pii> adj[MAXV];
+vector<int> par(MAXV,-1);
 
 vector<int> dijkstra(int src){
   vector<int> dist(V+1,INF);

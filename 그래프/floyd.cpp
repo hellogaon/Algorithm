@@ -1,9 +1,9 @@
 //플로이드 와샬: O(V^3)
-const int MAXN = 501;
+const int MAXV = 501;
 
 int V,E;
-int adj[MAXN][MAXN];
-int path[MAXN][MAXN];
+int adj[MAXV][MAXV];
+int path[MAXV][MAXV];
 
 void floyd(){
 	for(int i=1;i<=V;i++) adj[i][i] = 0;

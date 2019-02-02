@@ -1,8 +1,8 @@
 //크루스칼: O(ElgE)
-const int MAXN = 501;
+const int MAXV = 501;
 
 int V,E;
-vector<pii> adj[MAXN];
+vector<pii> adj[MAXV];
 
 struct DS{
   vector<int> par, rank;

@@ -1,9 +1,9 @@
 //무향그래프에서 삭제했을 그래프가 두 개 이상의 컴포넌트로 분리되는 간선
-const int MAXN = 10001;
+const int MAXV = 10001;
 
 int V,E,cnt;
-vector<vector<int> > adj(MAXN);
-vector<int> visited(MAXN,-1);
+vector<vector<int> > adj(MAXV);
+vector<int> visited(MAXV,-1);
 vector<pii> isCB;
 
 int findCB(int here, int par){
