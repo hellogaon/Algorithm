@@ -1,9 +1,9 @@
-//CHT - Convex Hull Trick: O(NlgN)
+//Convex Hull Trick: O(NlgN)
 //dp(i) = min(0≤j<i){ A(i)B(j)+C(j) } + D(i)
 //조건 1) min일 경우 B의 값이 항상 감소, max일 경우 B의 값이 항상 증가
 //볼록껍질에 해당하는 선분만 모아 x = A(i)에 해당하는 선분을 찾아 값을 반환
 
-struct Line{ // f(x) = ax + b, x >= s
+struct Line{ // f(x) = ax + b, x ≥ s
   ll a,b;
   double s;
   Line(): a(1), b(0), s(0) {}
@@ -27,7 +27,7 @@ struct CHT{
     while(top > 0){
       g.s = cross(g,f[top-1]);
       if(f[top-1].s < g.s) break;
-      // 쌓기 전에 top과 교점을 구해서 top의 시작점보다 교점이 앞일 경 pop
+      // 쌓기 전에 top과 교점을 구해서 top의 시작점보다 교점이 앞일 경우 pop
       --top;
     }
     f[top++] = g;
