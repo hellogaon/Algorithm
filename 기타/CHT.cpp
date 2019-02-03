@@ -1,5 +1,8 @@
 //CHT - Convex Hull Trick: O(NlgN)
-//dp(i) = min(0≤j<i){ dp(j) + a[i]b[j] }
+//dp(i) = min(0≤j<i){ A(i)B(j)+C(j) } + D(i)
+//조건 1) min일 경우 B의 값이 항상 감소, max일 경우 B의 값이 항상 증가
+//볼록껍질에 해당하는 선분만 모아 x = A(i)에 해당하는 선분을 찾아 값을 반환
+
 struct Line{ // f(x) = ax + b, x >= s
   ll a,b;
   double s;
