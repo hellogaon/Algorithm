@@ -1,5 +1,5 @@
 //Divide & Conquer Optimization: O(KNlgN)
-//D(t,i) = min(k<i){ D(k-1,k) + C(k,i) }
+//D(t,i) = min(k<i){ D(t-1,k) + C(k,i) }
 //조건 1) C함수가 quadrangle inequality를 만족
 //a≤b≤c≤d일 때 C(a,c)+C(b,d) ≤ C(a,d)+C(b,c)
 //K[t][i] = D[t][i]가 최소가 되기 위한 가장 작은 k일 때
