@@ -3,10 +3,10 @@ const int MAXN = 1000001;
 
 int prime[MAXN];
 
-int main(){
-  for(int i=2;i*i<MAXN;i++){
+void init(){
+  for(ll i=2;i*i<MAXN;i++){
     if(prime[i]==0){
-      for(int j=i*i;j<MAXN;j+=i) prime[j]=1;
+      for(ll j=i*i;j<MAXN;j+=i) prime[j]=1;
     }
   }
 }

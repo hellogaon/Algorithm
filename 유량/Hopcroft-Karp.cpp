@@ -19,11 +19,10 @@ void bfs(int n){
   }
   while(!q.empty()){
     int here = q.front(); q.pop();
-    for(int i=0;i<adj[here].size();i++){
-      int there = adj[here][i];
-      if(bMatch[there] != -1 && level[bMatch[there]] == INF){
-        level[bMatch[there]] = level[here] + 1;
-        q.push(bMatch[there]);
+    for(int next: adj[here]){
+      if(bMatch[next] != -1 && level[bMatch[next]] == INF){
+        level[bMatch[next]] = level[here] + 1;
+        q.push(bMatch[next]);
       }
     }
   }

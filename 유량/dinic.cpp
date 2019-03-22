@@ -31,8 +31,7 @@ bool bfs(int s, int e){
   q.push(s);
   while(!q.empty()){
     int here = q.front(); q.pop();
-    for(int i=0;i<adj[here].size();i++){
-      Edge* ed = adj[here][i];
+    for(auto ed: adj[here]){
       int there = ed->t;
       if(ed->r() > 0 && level[there] == -1){
         q.push(there);

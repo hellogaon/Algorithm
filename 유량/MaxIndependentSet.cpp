@@ -22,7 +22,7 @@ void MI(int n, int m){
       bChosen[i] = true;
   //2. 두 정점이 연결되어 있을 경우 그중 A의 정점을 지우고 B의 대응된 정점을
   //대신 선택한다. 더이상 변화가 일어나지 않을 때까지 반복한다.
-  while(true){
+  while(1){
     bool changed = false;
     for(int a=0;a<n;a++)
       for(int i=0;i<adj[a].size();i++){

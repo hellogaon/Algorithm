@@ -3,28 +3,24 @@
 //시간복잡도 : O(lgN)
 const int MAX_DEPTH = 18; // 세그먼트 트리의 높이
 const int MAX_ST = 1<<MAX_DEPTH; // 초기화에 사용되는 노드 개수
-const int MAX = 100001; // 점의 개수
+const int MAX = 10001; // 점의 개수
 const int MAX_RANGE = 100001; // 좌표값의 범위
 const int MAX_NODE = MAX_ST + MAX*MAX_DEPTH; // 전체에서 사용되는 노드 개수의 상한
 
 struct Node{
-  int val;
-  int nl, nr, nNum, lNum, rNum;
+  int val, nl, nr, nNum, lNum, rNum;
   Node(): val(-1), nl(-1), nr(-1) {}
   Node(int nl1, int nr1, int nNum1){
-    val = 0;
-    nl = nl1, nr = nr1, nNum = nNum1;
+    val = 0, nl = nl1, nr = nr1, nNum = nNum1;
     lNum = -1, rNum = -1;
   }
 };
 
-struct PersistentSegTree{
-  int TN;
-  int ncnt;
-  int root[MAX];
+struct PST{
+  int TN, ncnt, root[MAX];
   Node node[MAX_NODE];
 
-  PersistentSegTree(){
+  PST(){
     TN = 0, ncnt = 0;
     fill(root,root+MAX,-1);
     root[TN++] = init(0,MAX_ST/2-1);
