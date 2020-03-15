@@ -2,7 +2,6 @@
 // 시간복잡도 min(O(|E|f),O(|V||E|^2)
 const int MAXV = 1001;
 
-int V,S,E;
 vector<int> adj[MAXV];
 // c[u][v] = u에서 v로 보낼 수 있는 용량
 // f[u][v] = u에서 v로 흘러가는 유량 (방향이 반대일 경우 음수)
@@ -30,7 +29,7 @@ int networkflow(int s, int e){
     if(par[e] == -1) break;
     int amt = INF;
     for(int p = e; p != s; p = par[p])
-      amt = min(c[par[p]][p] - f[par[p]][p],amt);
+      amt = min(c[par[p]][p] - f[par[p]][p], amt);
     for(int p = e; p != s; p = par[p]){
       f[par[p]][p] += amt;
       f[p][par[p]] -= amt;
@@ -38,16 +37,4 @@ int networkflow(int s, int e){
     ret += amt;
   }
   return ret;
-}
-
-int main(){
-  scanf("%d %d %d",&V,&S,&E);
-  for(int i=0;i<V;i++){
-    int A,B,C;
-    scanf("%d %d %d",&A,&B,&C);
-    c[A][B] += C;
-    adj[A].pb(B);
-    adj[B].pb(A);
-  }
-  printf("%d\n",networkflow(S,E));
 }

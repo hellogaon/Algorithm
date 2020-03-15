@@ -10,15 +10,15 @@ int cb(int here, int par){
   for(int next: adj[here]){
     if(next == par) continue;
     if(visited[next] == -1){
-      int sub = cb(next,here);
+      int sub = cb(next, here);
       if(sub > visited[here])
-        isCB.pb(mp(min(here,next),max(here,next)));
-      ret = min(ret,sub);
+        isCB.pb(mp(min(here, next), max(here, next)));
+      ret = min(ret, sub);
     }
-    else ret = min(ret,visited[next]);
+    else ret = min(ret, visited[next]);
   }
   return ret;
 }
 
 for(int i=1;i<=V;i++)
-  if(visited[i] == -1) cb(i,0);
+  if(visited[i] == -1) cb(i, 0);

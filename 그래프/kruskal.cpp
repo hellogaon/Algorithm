@@ -10,19 +10,19 @@ ll kruskal(){
   vector<pair<int,pii> > e;
   for(int i=1;i<=V;i++){
     for(auto p: adj[i]){
-      int next = p.first, cost = p.second;
-      e.pb(mp(cost,mp(i,next)));
+      int nxt = p.first, c = p.second;
+      e.pb(mp(c, mp(i, nxt)));
     }
   }
-  sort(e.begin(),e.end());
+  sort(e.begin(), e.end());
   DS ds(V+1);
   for(int i=0;i<e.size();i++){
-    int cost = e[i].first;
+    int c = e[i].first;
     int u = e[i].second.first, v = e[i].second.second;
     if(ds.find(u) == ds.find(v)) continue;
     ds.merge(u,v);
     edges.pb(mp(u,v));
-    ret += cost;
+    ret += c;
   }
   return ret;
 }

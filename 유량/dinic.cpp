@@ -1,4 +1,4 @@
-//디닉: O(V^2E)
+//디닉: min(O(Ef),O(V^2E))
 const int MAXV = 1005;
 const int S = MAXV-2;
 const int E = MAXV-1;
@@ -48,7 +48,7 @@ int dfs(int here, int sink, int flow){
     Edge* e = adj[here][i];
     int there = e->t;
     if(e->r() > 0 && level[there] == level[here]+1){
-      int sz = dfs(there,sink,min(e->r(),flow));
+      int sz = dfs(there, sink, min(e->r(), flow));
       if(sz > 0){
         e->push(sz);
         return sz;
@@ -63,7 +63,7 @@ int solve(int s, int e){
   while(bfs(s,e)){
     memset(work,0,sizeof(work));
     while(1){
-      int flow = dfs(s,e,INF);
+      int flow = dfs(s, e, INF);
       if(flow == 0) break;
       ret += flow;
     }
@@ -77,12 +77,12 @@ int lsum;
 
 void add_LR_edge(int u, int v, int l, int r){
   lsum += l;
-  addEdge(u,v,r-l);
-  addEdge(NEW_S,v,l);
-  addEdge(u,NEW_E,l);
+  addEdge(u, v, r-l);
+  addEdge(NEW_S, v, l);
+  addEdge(u, NEW_E, l);
 }
 
 bool solveLR(int s, int e){
-  addEdge(e,s,INF);
-  return lsum == solve(NEW_S,NEW_E);
+  addEdge(e, s, INF);
+  return lsum == solve(NEW_S, NEW_E);
 }

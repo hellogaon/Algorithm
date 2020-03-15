@@ -16,17 +16,3 @@ void eratosthenes(int n){
     }
   }
 }
-
-int main(){
-  int N;
-  scanf("%d",&N);
-  eratosthenes(N);
-  vector<int> factor;
-  while(N>1){
-    factor.pb(minFactor[N]);
-    N/=minFactor[N];
-  }
-  for(int i=0;i<factor.size();i++){
-    printf("%d\n",factor[i]);
-  }
-}

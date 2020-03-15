@@ -29,6 +29,6 @@ void getpath(int u, int v){
 	if(path[u][v] == -1){
 		p.pb(u); return;
 	}
-	getpath(u,path[u][v]);
-	getpath(path[u][v],v); 
+	getpath(u, path[u][v]);
+	getpath(path[u][v], v); 
 }

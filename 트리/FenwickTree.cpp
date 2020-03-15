@@ -1,6 +1,6 @@
-struct Fenwicktree{
+struct FW{
   vector<ll> tree;
-  Fenwicktree(int n) : tree(n+1) {}
+  FW(int n) : tree(n+1) {}
   // sum(pos) : A[0...pos] 의 부분 합
   ll sum(int pos){
     ++pos;

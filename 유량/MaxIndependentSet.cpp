@@ -15,8 +15,8 @@ vector<bool> aChosen, bChosen;
 void MI(int n, int m){
   int C = BM(n,m);
   //1. A의 모든 정점들을 선택하고 B에서 대응되지 않은 정점들을 선택한다.
-  aChosen = vector<bool>(n, true);
-  bChosen = vector<bool>(m, false);
+  aChosen = vector<bool>(n,true);
+  bChosen = vector<bool>(m,false);
   for(int i=0;i<m;i++)
     if(bMatch[i] == -1)
       bChosen[i] = true;

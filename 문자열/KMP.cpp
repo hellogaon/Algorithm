@@ -1,7 +1,7 @@
 //pi[i]=N[..i]의 접미사도 되고 접두사도 되는 문자열의 최대 길이
 vector<int> getpi(string& N){
   int n = N.size();
-  vector<int> pi(n,0);
+  vector<int> pi(n, 0);
   for(int i=1,j=0;i<n;i++){
     while(j > 0 && N[i] != N[j]) j = pi[j-1];
     if(N[i] == N[j]) pi[i] = ++j;

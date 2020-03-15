@@ -12,19 +12,19 @@ struct Comparator{
 //SA: 어떤 문자열 S의 모든 접미사를 사전순으로 정렬해 둔 것
 vector<int> getSA(string& s){
   int n = s.size(), t = 1;
-  vector<int> g(n+1),p(n);
+  vector<int> g(n+1), p(n);
   for(int i=0;i<n;i++) g[i] = s[i];
   g[n] = -1;
   for(int i=0;i<n;i++) p[i] = i;
   while(t < n){
-    Comparator cmp(g,t);
-    sort(p.begin(),p.end(),cmp);
+    Comparator cmp(g, t);
+    sort(p.begin(), p.end(), cmp);
     t*=2;
     if(t>=n) break;
     vector<int> ng(n+1);
     ng[n] = -1; ng[p[0]] = 0;
     for(int i=1;i<n;i++)
-      if(cmp(p[i-1],p[i]))
+      if(cmp(p[i-1], p[i]))
         ng[p[i]] = ng[p[i-1]] + 1;
       else
         ng[p[i]] = ng[p[i-1]];
@@ -44,7 +44,7 @@ vector<int> getLCP(string& s, vector<int> SA){
       while(s[j+len] == s[i+len]) len++;
       LCP[rank[i]] = len;
     }
-    len = max(len-1,0);
+    len = max(len-1, 0);
   }
   return LCP;
 }

@@ -12,13 +12,13 @@ int cv(int here, bool root){
   int c = 0;
   for(int next: adj[here]){
     if(visited[next] == -1){
-      int sub = cv(next,false);
+      int sub = cv(next, false);
       if(!root && sub >= visited[here])
         isCV[here] = true;
-      ret = min(ret,sub);
+      ret = min(ret, sub);
       c++;
     }
-    else ret = min(ret,visited[next]);
+    else ret = min(ret, visited[next]);
   }
   if(root) isCV[here] = (c >= 2);
   return ret;

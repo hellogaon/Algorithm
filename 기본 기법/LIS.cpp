@@ -4,41 +4,31 @@
 // path[i] = LIS에서 i가 몇번 째에 있었는 지.
 const int MAXN = 10000001;
 
-vector<int> v(MAXN); 
-vector<int> path(MAXN);
+int N,A[MAXN],path[MAXN];
 
-int LIS(vector<int>& a, int n){
+int LIS(){
   vector<int> lis;
-  for(int i=0;i<n;i++){
-    auto it = lower_bound(lis.begin(),lis.end(),a[i]);
+  for(int i=0;i<N;i++){
+    auto it = lower_bound(lis.begin(), lis.end(), A[i]);
     path[i] = (int)(it-lis.begin())+1;
-    if(it == lis.end()) lis.pb(a[i]);
-    else *it = a[i];
+    if(it == lis.end()) lis.pb(A[i]);
+    else *it = A[i];
   }
   return (int)lis.size();
 }
 
-void getpath(vector<int>& a, int lis, int n){
+vector<int> getpath(int lis){
   stack<int> s;
-  int idx = n-1;
+  int idx = N-1;
   for(int i=lis;i>0;idx--){
-    if(path[idx]==i){
-      s.push(a[idx]); i--;
+    if(path[idx] == i){
+      s.push(A[idx]); i--;
     }
   }
+  vector<int> ret;
   while(!s.empty()){
-    printf("%d ",s.top());
+    ret.pb(s.top());
     s.pop();
   }
-  printf("\n");
-}
-
-int main(){
-  int N;
-  scanf("%d",&N);
-  for(int i=0;i<N;i++)
-    scanf("%d",&v[i]);
-  int ans = LIS(v,N);
-  printf("%d\n",ans);
-  getpath(v,ans,N);
+  return ret;
 }

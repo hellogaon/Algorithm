@@ -31,19 +31,21 @@ struct HLD{
     }
     ST = SegTree(a);
   }
-
+  
+  // 첫 번째 DFS: 각 정점의 서브트리 크기 구하기
   void dfs1(int x, int p){
     par[x] = p; sub[x] = 1;
     for(auto &t: adj[x]){
       int next = t.first;
       if(next != p){
         lv[next] = lv[x] + 1;
-        dfs1(next,x);
+        dfs1(next, x);
         sub[x] += sub[next];
       }
     }
   }
-
+  
+  // 두 번째 DFS: 각 간선을 그룹별로 분류
   void dfs2(int x, int p, int cn){
     dfsn[x] = dn;
     chain[dn] = cn;
@@ -54,17 +56,17 @@ struct HLD{
       if(next != p && (idx == -1 || sub[next] > sub[idx]))
         idx = next;
     }
-    if(idx != -1) dfs2(idx,x,cn);
+    if(idx != -1) dfs2(idx, x, cn);
     for(auto &t: adj[x]){
       int next = t.first;
       if(next != p && next != idx)
-        dfs2(next,x,next);
+        dfs2(next, x, next);
     }
   }
 
   //u와 v를 잇는 간선의 가중치를 k로 바꿈
   void update(int u, int v, int k){
-    if(lv[u] < lv[v]) swap(u,v);
+    if(lv[u] < lv[v]) swap(u, v);
     ST.update(dfsn[u],k);
   }
 
@@ -75,15 +77,15 @@ struct HLD{
     while(chain[u] != chain[v]){
       int uHead = chain[u], vHead = chain[v];
       if(lv[uHead] > lv[vHead]){
-        ret = max(ret,ST.query(dfsn[uHead],u));
+        ret = max(ret, ST.query(dfsn[uHead], u));
         u = dfsn[par[uHead]];
       }
       else{
-        ret = max(ret,ST.query(dfsn[vHead],v));
+        ret = max(ret, ST.query(dfsn[vHead], v));
         v = dfsn[par[vHead]];
       }
     }
-    ret = max(ret,ST.query(min(u,v)+1,max(u,v)));
+    ret = max(ret, ST.query(min(u, v)+1, max(u, v)));
     return ret;
   }
 };

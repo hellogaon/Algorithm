@@ -14,3 +14,11 @@ struct QueryNode{
     return (e < O.e);
   }
 };
+
+//첫 쿼리는 직접 구한 뒤 그 구간을 한 칸씩 넓히거나 줄이면서 진행 add 연산 먼저 진행할 것!
+sqrtN = sqrt(N);
+int s = Q[0].s, e = Q[0].e;
+while(Q[i].s < s)
+while(e < Q[i].e)
+while(Q[i].s > s)
+while(e > Q[i].e)

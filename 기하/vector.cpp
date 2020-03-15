@@ -21,7 +21,7 @@ struct vector2{
   }
   //벡터의 길이 반환
   double norm() const{
-    return hypot(x,y);
+    return hypot(x, y);
   }
   //단위벡터 (영벡터 제외)
   vector2 normalize() const{
@@ -29,7 +29,7 @@ struct vector2{
   }
   //x축 양의 방향부터 이 벡터까지 반시계 방향으로 잰 각도
   double polar() const{
-    return fmod(atan2(y,x) + 2*PI, 2*PI);
+    return fmod(atan2(y, x) + 2*PI, 2*PI);
   }
   //내적 외적
   double dot(const vector2& rhs) const{
@@ -57,7 +57,7 @@ double ccw(vector2 a, vector2 b){
 
 //점 p를 기준으로 벡터 b가 벡터 a의 반시계 방향이면 양수, 시계 방향이면 음수, 평행이면 0
 double ccw(vector2 p, vector2 a, vector2 b){
-  return ccw(a-p,b-p);
+  return ccw(a-p, b-p);
 }
 
 //(a,b)를 포함하는 선과 (c,d)를 포함하는 선의 교점을 x에 반환
@@ -73,17 +73,17 @@ bool lineIs(vector2 a, vector2 b, vector2 c, vector2 d, vector2& x){
 //(a,b) (c,d)가 평행한 두 선분일 때 이들이 겹치는 지 확인
 //겹칠 경우 선분의 교점을 p에 반환
 bool paraSeg(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
-  if(b < a) swap(a,b);
-  if(d < c) swap(c,d);
+  if(b < a) swap(a, b);
+  if(d < c) swap(c, d);
   //한 직선 위에 없거나 두 선분이 겹치지 않는 경우
-  if(ccw(a,b,c)!=0 || b < c || d < a) return false;
+  if(ccw(a, b, c)!=0 || b < c || d < a) return false;
   // 교차점 찾기
   if(a < c) p = c; else p = a;
   return true;
 }
 //a,b,p가 일직선에 있다고 가정 할 때, a,b를 잇는 선분위에 p가 있는 지
 bool inSeg(vector2 p, vector2 a, vector2 b){
-  if(b < a) swap(a,b);
+  if(b < a) swap(a, b);
   return p==a || p==b || (a<p && p<b);
 }
 //(a,b)선분과 (c,d)선분의 교점을 p에 반환
@@ -91,20 +91,20 @@ bool inSeg(vector2 p, vector2 a, vector2 b){
 //두 선분이 교차하지 않을 경우 false를 반환
 bool segIs(vector2 a, vector2 b, vector2 c, vector2 d, vector2& p){
   //두 직선이 평행인 경우
-  if(!lineIs(a,b,c,d,p))
-    return paraSeg(a,b,c,d,p);
+  if(!lineIs(a, b, c, d, p))
+    return paraSeg(a, b, c, d, p);
   //p가 두 선분에 포함되어 있는 경우에만 참
-  return inSeg(p,a,b) && inSeg(p,c,d);
+  return inSeg(p, a, b) && inSeg(p, c, d);
 }
 
 //두 선분이 서로 접촉하는 지 여부를 반환
 bool segIs2(vector2 a, vector2 b, vector2 c, vector2 d){
-  double ab = ccw(a,b,c) * ccw(a,b,d);
-  double cd = ccw(c,d,a) * ccw(c,d,b);
+  double ab = ccw(a, b, c) * ccw(a, b, d);
+  double cd = ccw(c, d, a) * ccw(c, d, b);
   //두 선분이 한 직선 위에 있거나 끝 점이 겹치는 경우
   if(ab==0 && cd==0){
-    if(b < a) swap(a,b);
-    if(d < c) swap(c,d);
+    if(b < a) swap(a, b);
+    if(d < c) swap(c, d);
     return !(b<c || d<a);
   }
   return ab<=0 && cd<=0;
@@ -116,7 +116,7 @@ vector2 foot(vector2 p, vector2 a, vector2 b){
 }
 //점 p와 (a,b) 직선 사이의 거리
 double dist(vector2 p, vector2 a, vector2 b){
-  return (p - foot(p,a,b)).norm();
+  return (p - foot(p, a, b)).norm();
 }
 
 //주어진 단순 사각형 p의 넓이 p는 각 꼭지점의 위치 벡터의 집합
@@ -153,7 +153,7 @@ bool polyIs(const polygon& p, const polygon& q){
   if(isIn(p[0],q) || isIn(q[0],p)) return true;
   for(int i=0;i<n;i++)
     for(int j=0;j<m;j++)
-      if(segIs2(p[i],p[(i+1)%n],q[j],q[(j+1)%m]))
+      if(segIs2(p[i], p[(i+1)%n],q[j], q[(j+1)%m]))
         return true;
   return false;
 }
@@ -165,25 +165,25 @@ polygon cutPoly(const polygon& p, const vector2& a, const vector2& b){
   int n=p.size();
   vector<bool> inside(n);
   for(int i=0;i<n;i++)
-    inside[i]=ccw(a,b,p[i]) >= 0;
+    inside[i]=ccw(a, b, p[i]) >= 0;
   polygon ret;
   for(int i=0;i<n;i++){
     int j=(i+1)%n;
     if(inside[i]) ret.pb(p[i]);
     if(inside[i]!=inside[j]){
       vector2 cross;
-      if(lineIs(p[i],p[j],a,b,cross))
+      if(lineIs(p[i], p[j], a, b, cross))
         ret.pb(cross);
     }
   }
   return ret;
 }
 polygon Is(const polygon& p, double x1, double y1, double x2, double y2){
-  vector2 a(x1,y1),b(x2,y1),c(x2,y2),d(x1,y2);
-  polygon ret = cutPoly(p,a,b);
-  ret = cutPoly(ret,b,c);
-  ret = cutPoly(ret,c,d);
-  ret = cutPoly(ret,d,a);
+  vector2 a(x1, y1),b(x2, y1),c(x2, y2),d(x1, y2);
+  polygon ret = cutPoly(p, a, b);
+  ret = cutPoly(ret, b, c);
+  ret = cutPoly(ret, c, d);
+  ret = cutPoly(ret, d, a);
   return ret;
 }
 
@@ -209,10 +209,10 @@ polygon grahamScan(vector<vector2>& points){
       if(points[i].x < points[leastY].x)
         leastY = i;
   }
-  swap(points[0],points[leastY]);
+  swap(points[0], points[leastY]);
   pivot = points[0];
   //0번을 제외한 점들을 반시계 방향으로 정렬
-  sort(points.begin()+1,points.end(),cmp);
+  sort(points.begin()+1, points.end(), cmp);
   polygon hull;
   for(int i=0;i<n;i++){
     //스택에 2개 이상의 점이 남아 있는 한 스택 최상단 점 2개와 다음 점의 관계가 CCW일 때까지 pop
@@ -227,8 +227,8 @@ polygon grahamScan(vector<vector2>& points){
 //시계 반대 방향으로 주어진 볼록 다각형에서 가장 먼 꼭지점 쌍 사이의 거리를 반환
 double diameter(const polygon& p){
   int n = p.size();
-  int left = min_element(p.begin(),p.end())-p.begin();
-  int right = max_element(p.begin(),p.end())-p.begin();
+  int left = min_element(p.begin(), p.end())-p.begin();
+  int right = max_element(p.begin(), p.end())-p.begin();
   vector2 calipersA;
   double ret = (p[right]-p[left]).norm();
   vector<vector2> toNext(n);
@@ -245,7 +245,7 @@ double diameter(const polygon& p){
       calipersA = toNext[b] * (-1.0);
       b = (b + 1) % n;
     }
-    ret = max(ret,((p[a]-p[b]).norm()));
+    ret = max(ret, ((p[a]-p[b]).norm()));
   }
   return ret;
 }

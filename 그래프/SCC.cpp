@@ -15,9 +15,9 @@ int scc(int here){
   st.push(here);
   for(int next: adj[here]){
     if(visited[next] == -1)
-      ret = min(ret,scc(next));
+      ret = min(ret, scc(next));
     else if(sccId[next] == -1)
-      ret = min(ret,visited[next]);
+      ret = min(ret, visited[next]);
   }
   if(ret == visited[here]){
     while(1){

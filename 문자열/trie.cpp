@@ -1,5 +1,5 @@
 const int MAXC = 26;
-int toNumber(char ch) { return ch - 'a'; }
+int toNumber(char ch) { return ch - 'A'; }
 
 struct Trie{
   int terminal;
@@ -9,19 +9,18 @@ struct Trie{
   Trie() : terminal(-1){
     memset(c, 0, sizeof(c));
   }
-  void insert(char* key, int num){
-    if(*key == 0) terminal = num;
+  void insert(string& key, int num, int idx=0){
+    if(idx == key.size()) terminal = num;
     else{
-      int next = toNumber(*key);
-      if(c[next] == NULL)
-        c[next] = new Trie();
-      c[next]->insert(key+1,num);
+      int next = toNumber(key[idx]);
+      if(c[next] == NULL) c[next] = new Trie();
+      c[next]->insert(key, num, idx+1);
     }
   }
-  Trie* find(char* key){
-    if(*key == 0) return this;
-    int next = toNumber(*key);
+  Trie* find(string& key, int idx=0){
+    if(idx == key.size()) return this;
+    int next = toNumber(key[idx]);
     if(c[next] == NULL) return NULL;
-    return c[next]->find(key+1);
+    return c[next]->find(key, idx+1);
   }
 };

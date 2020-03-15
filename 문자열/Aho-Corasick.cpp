@@ -1,4 +1,3 @@
-//s내에서 패턴이 출현할 때마다 (마지막 글자, 패턴 번호)의 쌍을 저장
 void failFunc(Trie* root){
   queue<Trie*> q;
   root->fail = root;
@@ -25,7 +24,8 @@ void failFunc(Trie* root){
   }
 }
 
-vector<pii> AC(const string& s, Trie* root){
+//s내에서 패턴이 출현할 때마다 (마지막 글자, 패턴 번호)의 쌍을 저장
+vector<pii> AC(string& s, Trie* root){
   vector<pii> ret;
   Trie* now = root;
   for(int i=0;i<s.size();i++){
@@ -34,7 +34,10 @@ vector<pii> AC(const string& s, Trie* root){
       now = now->fail;
     if(now->c[chr]) now = now->c[chr];
     for(int j=0;j<now->output.size();j++)
-      ret.pb(mp(i,now->output[j]));
+      ret.pb(mp(i, now->output[j]));
   }
   return ret;
 }
+
+failFunc(&root);
+vector<pii> ret = AC(s, &root);

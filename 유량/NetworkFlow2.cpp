@@ -16,7 +16,6 @@ struct Edge {
   }
 };
 
-int V,S,E;
 // 유량 네트워크의 인접리스트
 vector<Edge*> adj[MAXV];
 // u에서 v로 가는 간선을 추가
@@ -39,7 +38,7 @@ int networkflow(int s, int e){
     q.push(s);
     while(!q.empty() && par[e] == -1){
       int here = q.front(); q.pop();
-      for(int i=0; i<adj[here].size();i++){
+      for(int i=0;i<adj[here].size();i++){
         Edge* ed = adj[here][i];
         int there = ed->t;
         if(ed->r() > 0 && par[there] == -1) {
@@ -52,20 +51,10 @@ int networkflow(int s, int e){
     if(par[e] == -1) break;
     int amt = INF;
     for(int p = e; p != s; p = par[p])
-      amt = min(amt,path[p]->r());
+      amt = min(amt, path[p]->r());
     for(int p = e; p != s; p = par[p])
       path[p]->push(amt);
     ret += amt;
   }
   return ret;
-}
-
-int main(){
-  scanf("%d %d %d",&V,&S,&E);
-  for(int i=0;i<V;i++){
-    int A,B,C;
-    scanf("%d %d %d",&A,&B,&C);
-    addEdge(A,B,C);
-  }
-  printf("%d\n",networkflow(S,E));
 }
