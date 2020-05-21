@@ -15,10 +15,23 @@ struct QueryNode{
   }
 };
 
+void add(int idx){
+
+}
+
+void del(int idx){
+
+}
+
+QueryNode Q[100005];
+
 //첫 쿼리는 직접 구한 뒤 그 구간을 한 칸씩 넓히거나 줄이면서 진행 add 연산 먼저 진행할 것!
 sqrtN = sqrt(N);
+sort(Q,Q+M);
 int s = Q[0].s, e = Q[0].e;
-while(Q[i].s < s)
-while(e < Q[i].e)
-while(Q[i].s > s)
-while(e > Q[i].e)
+for(int i=s;i<=e;i++) add(i);
+
+while(Q[i].s < s) add(--s);
+while(e < Q[i].e) add(++e);
+while(Q[i].s > s) del(s++);
+while(e > Q[i].e) del(e--);

@@ -32,8 +32,8 @@ vector<int> berlekamp_massey(vector<int> x){
 		}
 		ll k = -(x[i] - t) * ipow(ld, MOD - 2) % MOD;
 		vector<int> c(i-lf-1);
-		c.push_back(k);
-		for(auto &j : ls) c.push_back(-j * k % MOD);
+		c.pb(k);
+		for(auto &j : ls) c.pb(-j * k % MOD);
 		if(c.size() < cur.size()) c.resize(cur.size());
 		for(int j=0; j<cur.size(); j++){
 			c[j] = (c[j] + cur[j]) % MOD;
@@ -98,8 +98,8 @@ vector<int> get_min_poly(int n, vector<elem> M){
 		return uniform_int_distribution<int>(lb, ub)(rng);
 	};
 	for(int i=0; i<n; i++){
-		rnd1.push_back(randint(1, MOD - 1));
-		rnd2.push_back(randint(1, MOD - 1));
+		rnd1.pb(randint(1, MOD - 1));
+		rnd2.pb(randint(1, MOD - 1));
 	}
 	vector<int> gobs;
 	for(int i=0; i<2*n+2; i++){
@@ -108,7 +108,7 @@ vector<int> get_min_poly(int n, vector<elem> M){
 			tmp += 1ll * rnd2[j] * rnd1[j] % MOD;
 			if(tmp >= MOD) tmp -= MOD;
 		}
-		gobs.push_back(tmp);
+		gobs.pb(tmp);
 		vector<int> nxt(n);
 		for(auto &i : M){
 			nxt[i.x] += 1ll * i.v * rnd1[i.y] % MOD;
@@ -127,7 +127,7 @@ ll det(int n, vector<elem> M){
 	auto randint = [&rng](int lb, int ub){
 		return uniform_int_distribution<int>(lb, ub)(rng);
 	};
-	for(int i=0; i<n; i++) rnd.push_back(randint(1, MOD - 1));
+	for(int i=0; i<n; i++) rnd.pb(randint(1, MOD - 1));
 	for(auto &i : M){
 		i.v = 1ll * i.v * rnd[i.y] % MOD;
 	}
