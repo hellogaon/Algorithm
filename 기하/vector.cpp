@@ -213,6 +213,10 @@ polygon grahamScan(vector<vector2>& points){
   pivot = points[0];
   //0번을 제외한 점들을 반시계 방향으로 정렬
   sort(points.begin()+1, points.end(), cmp);
+  // 많은 점들을 볼록껍질로 가지고 싶을 경우
+  // int idx = n-1;
+  // for(;idx>=1;idx--) if(ccw(pivot, points[idx], points[idx-1])) break;
+  // reverse(points.begin()+idx, points.end());
   polygon hull;
   for(int i=0;i<n;i++){
     //스택에 2개 이상의 점이 남아 있는 한 스택 최상단 점 2개와 다음 점의 관계가 CCW일 때까지 pop

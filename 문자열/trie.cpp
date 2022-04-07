@@ -12,15 +12,15 @@ struct Trie{
   void insert(string& key, int num, int idx=0){
     if(idx == key.size()) terminal = num;
     else{
-      int next = toNumber(key[idx]);
-      if(c[next] == NULL) c[next] = new Trie();
-      c[next]->insert(key, num, idx+1);
+      int nxt = toNumber(key[idx]);
+      if(c[nxt] == NULL) c[nxt] = new Trie();
+      c[nxt]->insert(key, num, idx+1);
     }
   }
   Trie* find(string& key, int idx=0){
     if(idx == key.size()) return this;
-    int next = toNumber(key[idx]);
-    if(c[next] == NULL) return NULL;
-    return c[next]->find(key, idx+1);
+    int nxt = toNumber(key[idx]);
+    if(c[nxt] == NULL) return NULL;
+    return c[nxt]->find(key, idx+1);
   }
 };

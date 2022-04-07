@@ -9,7 +9,7 @@
 const int MAXN = 100005;
 
 vector<int> siz(MAXN);
-vector<bool> visit(MAXN);
+vector<bool> visited(MAXN);
 vector<pii> adj[MAXN];
 vector<int> cent_tree[MAXN];
 
@@ -17,7 +17,7 @@ int get_size(int u, int par){
   siz[u] = 1;
   for(pii p: adj[u]){
     int v = p.first, cost = p.second;
-    if(v == par || visit[v]) continue;
+    if(v == par || visited[v]) continue;
     siz[u] += get_size(v, u);
   }
   return siz[u];
@@ -26,7 +26,7 @@ int get_size(int u, int par){
 int get_cent(int u, int par, int cap){
   for(pii p: adj[u]){
     int v = p.first, cost = p.second;
-    if(v == par || visit[v]) continue;
+    if(v == par || visited[v]) continue;
     if(siz[v] > cap) return get_cent(v, u, cap);
   }
   return u;
@@ -35,10 +35,10 @@ int get_cent(int u, int par, int cap){
 int make_cent(int u){
   int cap = get_size(u, -1) / 2;
   int cent = get_cent(u, -1, cap);
-  visit[cent] = true;
+  visited[cent] = true;
   for(pii p: adj[cent]){
     int v = p.first, cost = p.second;
-    if(visit[v]) continue;
+    if(visited[v]) continue;
     int nxt_cent = make_cent(v);
     cent_tree[cent].pb(nxt_cent);
   }
@@ -46,12 +46,12 @@ int make_cent(int u){
 }
 
 void travel_cent(int u){
-  visit[u] = true;
+  visited[u] = true;
 
   //conquer
   for(pii p: adj[u]){
     int v = p.first, cost = p.second;
-    if(visit[v]) continue;
+    if(visited[v]) continue;
     
   }
 
@@ -61,5 +61,5 @@ void travel_cent(int u){
 }
 
 int cent = make_cent(1);
-fill(visit.begin(), visit.end(), false);
+fill(visited.begin(), visited.end(), false);
 travel_cent(cent);

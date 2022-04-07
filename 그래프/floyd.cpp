@@ -2,7 +2,7 @@
 const int MAXV = 101;
 
 int V,E;
-int mat[MAXV][MAXV];
+ll mat[MAXV][MAXV];
 int path[MAXV][MAXV];
 
 void init(){
@@ -21,6 +21,10 @@ void floyd(){
           mat[i][j] = mat[i][k] + mat[k][j];
         }
   }
+}
+
+void addEdge(int u, int v, ll c){
+  mat[u][v] = min(mat[u][v], c);
 }
 
 // u에서 v전까지 가는 최단 경로를 계산해 path에 저장한다 

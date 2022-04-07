@@ -33,5 +33,10 @@ int LCA(int u, int v){
   return par[u][0];
 }
 
+int getDist(int u, int v){
+  int lca = LCA(u, v);
+  return d[u] + d[v] - 2 * d[lca];
+}
+
 dfs(root, 0);
 init();

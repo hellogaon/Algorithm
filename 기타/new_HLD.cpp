@@ -59,7 +59,7 @@ struct HLD{
   //u와 v를 잇는 간선의 가중치를 k로 바꿈
   void update(int u, int v, int k){
     if(lv[u] < lv[v]) swap(u, v);
-    ST.update(in[u],k);
+    ST.update(in[u], k);
   }
 
   // //u정점과 v정점의 경로 상에서의 최대 가중치를 반환

@@ -4,10 +4,10 @@ const int MAXV = 10001;
 vector<pii> adj[MAXV];
 vector<int> par(MAXV,-1);
 
-vector<ll> dij(int src){
-  vector<ll> dist(MAXV, INF);
+vector<int> dij(int src){
+  vector<int> dist(MAXV, INF);
   dist[src] = 0;
-  priority_queue<pair<ll,int> > pq;
+  priority_queue<pair<int,int> > pq;
   pq.push(mp(0, src));
   while(!pq.empty()){
     int cost = -pq.top().first, here = pq.top().second;

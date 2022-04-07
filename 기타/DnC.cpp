@@ -24,12 +24,12 @@ void dnc(int t, int l, int r, int s, int e){
 }
 
 
-for(int j=0;j<MAXN;j++)
+for(int j=0;j<N;j++)
   D[1][j] = C[0][j];
     
-for(int i=2;i<=MAXK;i++)
-  for(int j=0;j<MAXN;j++)
+for(int i=2;i<=K;i++)
+  for(int j=0;j<N;j++)
     D[i][j] = INF;
 
-for(int t=2;t<=MAXK;t++)
-  dnc(t,0,N-1,0,N-1);
+for(int t=2;t<=K;t++)
+  dnc(t, 0, N-1, 0, N-1);

@@ -11,10 +11,10 @@ vector<int> bf(int src){
     bool update = false;
     for(int i=1;i<=V;i++){
       for(auto p: adj[i]){
-        int next = p.first, cost = p.second;
-        if(dist[i] != INF && dist[next] > dist[i] + cost){
+        int nxt = p.first, cost = p.second;
+        if(dist[i] != INF && dist[nxt] > dist[i] + cost){
           update = true;
-          dist[next] = dist[i] + cost;
+          dist[nxt] = dist[i] + cost;
         }
       }
     }

@@ -1,6 +1,7 @@
 struct SegTree{
   int n;
   vector<ll> sum;
+  SegTree(){}
   SegTree(ll *arr, int siz){
     n = siz;
     sum.resize(4 * n);

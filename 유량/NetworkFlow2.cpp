@@ -1,6 +1,8 @@
 // 네트워크 플로우 인접리스트로 구현
 // 시간복잡도 min(O(|E|f),O(|V||E|^2)
-const int MAXV = 1001;
+const int MAXV = 1005;
+const int S = MAXV-2;
+const int E = MAXV-1;
 
 // 간선 구조체
 struct Edge {
@@ -41,7 +43,7 @@ int networkflow(int s, int e){
       for(int i=0;i<adj[here].size();i++){
         Edge* ed = adj[here][i];
         int there = ed->t;
-        if(ed->r() > 0 && par[there] == -1) {
+        if(ed->r() > 0 && par[there] == -1){
           q.push(there);
           par[there] = here;
           path[there] = ed;
